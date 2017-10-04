@@ -14,7 +14,6 @@ $ timer [minutes]
 
 - macOS
 - C++11
-- Boost
 
 
 ## LISENCE
