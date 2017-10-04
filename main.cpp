@@ -1,10 +1,18 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include <boost/progress.hpp>
+#include <cstdio>
 
 using namespace std;
 using namespace chrono;
+
+void print_time(const steady_clock::duration& timer, const steady_clock::time_point& begin, const steady_clock::time_point& now) {
+	auto left = timer - (now - begin);
+	auto sec = duration_cast<seconds>(left) % 60;
+	auto min = duration_cast<minutes>(left);
+	printf("\r%02ld:%02lld left", min.count(), sec.count());
+	fflush(stdout);
+}
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
@@ -20,19 +28,16 @@ int main(int argc, char* argv[]) {
 	}
 
 	cout << "set timer " << min << " min" << endl;
-	const unsigned long expected_count = min * 600;
-	boost::progress_display show_progress(expected_count);
+	cout << endl;
 
 	auto begin = steady_clock::now();
 	auto end = begin;
 	auto chrono_min = minutes(min);
 	while (duration_cast<milliseconds>(end - begin) < chrono_min) {
-		this_thread::sleep_for(milliseconds(100));
+		print_time(chrono_min, begin, end);
+		this_thread::sleep_for(milliseconds(200));
 		end = steady_clock::now();
-		++show_progress;
 	}
-
-	show_progress += expected_count - show_progress.count();
 
 	cout << endl;
 	cout << "Stop: Ctrl+C Ctrl+C" << endl;
