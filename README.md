@@ -6,9 +6,12 @@ A timer on command line for macOS
 ## Usage
 
 ```
-$ timer [minutes]
+$ timer minutes
 ```
 
+```
+$ alarm hour:min
+```
 
 ## Requirement
 
